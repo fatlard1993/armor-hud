@@ -1,0 +1,18 @@
+{
+	"schemaVersion": 1,
+	"id": "armor-hud-gametest",
+	"version": "1.0.0",
+	"name": "Armor HUD game tests",
+	"description": "Loads the mod, dresses the player, and takes the picture.",
+	"license": "MIT",
+	"environment": "*",
+	"entrypoints": {
+		"fabric-client-gametest": [
+			"justfatlard.armor_hud.gametest.Showcase"
+		]
+	},
+	"depends": {
+		"armor-hud-justfatlard": "*",
+		"fabric-client-gametest-api-v1": "*"
+	}
+}

@@ -1,0 +1,16 @@
+{
+  "overview": [
+    "Your armor beside the hotbar, as the pieces themselves: helmet over chestplate over leggings over boots, each over its durability bar.",
+    "Client-side only. Nothing needs to be installed on the server."
+  ],
+  "versions": {
+    "1.0.0": [
+      "Each worn piece shows as its own icon beside the hotbar, stacked head to foot, dye, trim and shimmer included.",
+      "Under each icon, its durability bar, green to red, flashing when it is nearly broken.",
+      "A piece that takes a hit shakes and flashes; one that breaks leaves its slot flashing red.",
+      "A shield in the offhand sits beside the boots with its own durability bar, in place of vanilla's offhand slot.",
+      "Above the hearts, in place of vanilla's chestplates: armor points, toughness, and a bar over your hearts showing how many a full-health hit would leave you.",
+      "Protection enchantments count toward it."
+    ]
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "required": true,
+  "package": "justfatlard.armor_hud.mixin",
+  "compatibilityLevel": "JAVA_25",
+  "client": [
+    "HudMixin",
+    "LivingEntityMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}

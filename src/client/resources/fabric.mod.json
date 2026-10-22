@@ -1,0 +1,36 @@
+{
+  "schemaVersion": 1,
+  "id": "armor-hud-justfatlard",
+  "version": "${version}",
+  "name": "Armor HUD",
+  "description": "Your armor beside the hotbar, each piece's own icon over its durability bar, shaking when it is hit, with your shield beside it; and above the hearts, your armor points, toughness, and a bar showing how many hearts a big hit would leave you.",
+  "authors": [
+    "justfatlard"
+  ],
+  "contact": {
+    "sources": "https://github.com/fatlard1993/armor-hud"
+  },
+  "license": "MIT",
+  "icon": "assets/armor-hud-justfatlard/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "client": [
+      "justfatlard.armor_hud.Main"
+    ]
+  },
+  "mixins": [
+    "armor-hud-justfatlard.client.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loaderVersion}",
+    "fabric-api": "${fabricApiVersion}",
+    "minecraft": "${minecraftDependency}",
+    "java": ">=25"
+  },
+  "breaks": {
+    "pandorical": "<15.0.0"
+  },
+  "suggests": {
+    "pandorical": "*"
+  }
+}
