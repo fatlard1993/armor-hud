@@ -4,6 +4,9 @@
     "Client-side only. Nothing needs to be installed on the server."
   ],
   "versions": {
+    "1.0.1": [
+      "Smaller armor row numbers; stack hugs hotbar, empty offhand shows shield outline."
+    ],
     "1.0.0": [
       "Each worn piece shows as its own icon beside the hotbar, stacked head to foot, dye, trim and shimmer included.",
       "Under each icon, its durability bar, green to red, flashing when it is nearly broken.",
