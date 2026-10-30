@@ -18,7 +18,7 @@ When a piece takes a hit, its icon shakes and its bar flashes white. When one br
 
 An empty slot shows the inventory's faint outline for it, so a missing helmet looks missing. An elytra gets a bar like any chestplate, even though it gives no armor, because its durability is the one you most need to watch.
 
-A shield in your offhand joins them, beside your boots, with its own durability bar: it wears in a fight like armor does, so it is watched like armor. Vanilla's offhand slot goes away while it does, and the stack closes up against the hotbar. Anything else in your offhand keeps vanilla's slot, and the stack leaves room for it.
+A shield in your offhand joins them, beside your boots, with its own durability bar: it wears in a fight like armor does, so it is watched like armor. Vanilla's offhand slot goes away while it does, and the stack closes up against the hotbar. An empty offhand shows the shield's outline there instead, so the stack never leaves a gap. Anything else in your offhand keeps vanilla's slot, and the stack sits beside it.
 
 ## Above the hearts
 

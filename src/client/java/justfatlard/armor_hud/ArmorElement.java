@@ -23,9 +23,9 @@ import net.minecraft.world.item.ItemStack;
  * shaking when it takes a hit, and a shield in the offhand beside the boots in the same style.
  *
  * <p>Sits in vanilla's armor slot so both are drawn exactly when vanilla's row would be - not in
- * creative, not with the HUD hidden. Without a shield, the stack's anchor leaves room for the
- * offhand slot whether or not anything is in it, so nothing jumps when the offhand fills; a shield
- * takes that slot's place, and the stack closes up to the hotbar.
+ * creative, not with the HUD hidden. The stack always hugs whatever is beside it: the hotbar, or
+ * vanilla's offhand slot while that holds something other than a shield. An empty offhand gets the
+ * shield's outline, so the column is there either way.
  */
 public final class ArmorElement implements HudElement {
 	private static final Identifier ARMOR_ICON = Identifier.withDefaultNamespace("hud/armor_full");
@@ -58,8 +58,8 @@ public final class ArmorElement implements HudElement {
 	private static final int ROW_WIDTH = 81;
 	private static final int HEART_PITCH = 8;
 	private static final int SHIELD_HEIGHT = 3;
-	/** The numbers sit this far above vanilla's row, to make room for the shield bar under them. */
-	private static final int NUMBERS_LIFT = 4;
+	/** The numbers over the bar, smaller than the hotbar's text so the row stays short. */
+	private static final float NUMBERS_SCALE = 0.75F;
 	private static final int SHIELD = 0xFFC6C7D2;
 	private static final int SHIELD_LIGHT_HITS = 0x70C6C7D2;
 	private static final int HEART_NOTCH = 0x70000000;
@@ -103,7 +103,10 @@ public final class ArmorElement implements HudElement {
 			&& ArmorWatch.sinceBreak(ArmorWatch.OFFHAND, partialTick) < ArmorWatch.BREAK_TICKS);
 
 		if (config.showProtection) protectionRow(graphics, mc.font, player);
-		if (show || shield) stack(graphics, config, player, pieces, shield, partialTick);
+		// An empty offhand still gets the column, as the shield's outline; anything else in it keeps vanilla's slot.
+		boolean shieldColumn = shield
+			|| (showsShield(mc, config) && config.showEmptySlots && player.getOffhandItem().isEmpty());
+		if (show || shield) stack(graphics, config, player, pieces, shieldColumn, partialTick);
 	}
 
 	/**
@@ -122,7 +125,10 @@ public final class ArmorElement implements HudElement {
 	private static void stack(GuiGraphicsExtractor graphics, ArmorConfig config, Player player, ItemStack[] pieces,
 			boolean shield, float partialTick) {
 		int right = graphics.guiWidth() / 2 - HOTBAR_HALF - GAP;
-		if (!shield && player.getMainArm().getOpposite() == HumanoidArm.LEFT) right -= OFFHAND_SLOT;
+		// Vanilla draws its offhand slot only when there is something in it for the slot to hold.
+		if (!shield && !player.getOffhandItem().isEmpty() && player.getMainArm().getOpposite() == HumanoidArm.LEFT) {
+			right -= OFFHAND_SLOT;
+		}
 		int shieldX = right - ICON;
 		int x = shield ? shieldX - ICON - 1 : shieldX;
 		int top = graphics.guiHeight() - BOTTOM_MARGIN - BAR_OFFSET - BAR_HEIGHT - (pieces.length - 1) * PITCH;
@@ -134,7 +140,7 @@ public final class ArmorElement implements HudElement {
 		// Beside the boots, where the bottom of the stack meets the hotbar's items.
 		if (shield) {
 			cell(graphics, config, player.getOffhandItem(), ArmorWatch.OFFHAND, shieldX, top + (pieces.length - 1) * PITCH,
-				false, partialTick, blinkOn);
+				true, partialTick, blinkOn);
 		}
 	}
 
@@ -218,16 +224,21 @@ public final class ArmorElement implements HudElement {
 			graphics.fill(notch, shieldTop, notch + 1, shieldTop + SHIELD_HEIGHT, HEART_NOTCH);
 		}
 
-		int y = row - NUMBERS_LIFT - 1;
-		int cursor = iconAndValue(graphics, font, ARMOR_ICON, String.valueOf(protection.armor()), x, y);
+		// Drawn scaled from the bottom left, two pixels clear of the bar.
+		graphics.pose().pushMatrix();
+		graphics.pose().translate(x, shieldTop - 2);
+		graphics.pose().scale(NUMBERS_SCALE, NUMBERS_SCALE);
+		int y = -9;
+		int cursor = iconAndValue(graphics, font, ARMOR_ICON, String.valueOf(protection.armor()), 0, y);
 		cursor = iconAndValue(graphics, font, TOUGHNESS_ICON, wholeOrTenths(protection.toughness()), cursor + 2, y);
 
 		int lightShare = Math.round(light * 100F);
 		int heavyShare = Math.round(heavy * 100F);
 		String share = lightShare == heavyShare ? lightShare + "%" : lightShare + "-" + heavyShare + "%";
 		// Against the row's right edge, unless big numbers ahead of it push it out into the gap before the food.
-		int shareX = Math.max(x + ROW_WIDTH - font.width(share), cursor + 3);
+		int shareX = Math.max(Math.round(ROW_WIDTH / NUMBERS_SCALE) - font.width(share), cursor + 3);
 		graphics.text(font, share, shareX, y + 1, SHARE_COLOR, true);
+		graphics.pose().popMatrix();
 	}
 
 	/** The icon, then its value; returns where the value ends. */

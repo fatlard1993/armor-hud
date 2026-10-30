@@ -62,7 +62,8 @@ from both places. The hotbar draws in creative and the health pass does not; the
 
 `Showcase` is the gametest: it dresses the player in a mixed set with a shield in the offhand,
 hits that set hard enough to break the boots and shoots it mid-animation, swaps the shield for a
-torch to show vanilla's slot coming back, then an elytra with no helmet, then full netherite with
+torch to show vanilla's slot coming back, empties the offhand to show the shield's outline
+holding the column, then an elytra with no helmet, then full netherite with
 Protection IV. A shield breaking is not shot: it only breaks blocking, and the harness cannot hold
 the use key. The row's numbers are worth checking by hand against the formula: 56-31%,
 48-23% once the boots are gone, 16-3% and 93-87%.

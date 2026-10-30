@@ -60,6 +60,10 @@ public final class Showcase implements FabricClientGameTest {
 			server.runCommand("item replace entity @a weapon.offhand with minecraft:torch");
 			context.waitTicks(5);
 			shoot(context, "offhand-torch");
+			// An empty offhand gets the shield's outline, and the stack stays against the hotbar.
+			server.runCommand("item replace entity @a weapon.offhand with minecraft:air");
+			context.waitTicks(5);
+			shoot(context, "offhand-empty");
 			server.runCommand("item replace entity @a weapon.offhand with minecraft:shield");
 
 			server.runCommand("item replace entity @a armor.head with minecraft:air");
