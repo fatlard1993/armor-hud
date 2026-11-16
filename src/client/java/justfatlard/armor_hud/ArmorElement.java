@@ -75,6 +75,12 @@ public final class ArmorElement implements HudElement {
 	private static final float SHAKE_PIXELS = 1.5F;
 
 	private final HudElement vanilla;
+	private final ItemStack[] pieces = new ItemStack[ArmorWatch.HEAD_TO_FOOT.length];
+	/** The protection row's text, rebuilt only when what it says changes rather than every frame. */
+	private Protection shown;
+	private String armorText;
+	private String toughnessText;
+	private String shareText;
 
 	public ArmorElement(HudElement vanilla) {
 		this.vanilla = vanilla;
@@ -90,7 +96,6 @@ public final class ArmorElement implements HudElement {
 		}
 
 		float partialTick = delta.getGameTimeDeltaPartialTick(false);
-		ItemStack[] pieces = new ItemStack[ArmorWatch.HEAD_TO_FOOT.length];
 		boolean show = false;
 		for (int i = 0; i < pieces.length; i++) {
 			pieces[i] = player.getItemBySlot(ArmorWatch.HEAD_TO_FOOT[i]);
@@ -205,7 +210,7 @@ public final class ArmorElement implements HudElement {
 	 * heavy hit; the paler run past it is the extra a light hit leaves you, since armor stops a
 	 * bigger share of a smaller hit. The gap between them is what toughness closes.
 	 */
-	private static void protectionRow(GuiGraphicsExtractor graphics, Font font, Player player) {
+	private void protectionRow(GuiGraphicsExtractor graphics, Font font, Player player) {
 		Protection protection = Protection.of(player);
 		// Vanilla shows no row at zero armor.
 		if (!protection.any()) return;
@@ -229,12 +234,18 @@ public final class ArmorElement implements HudElement {
 		graphics.pose().translate(x, shieldTop - 2);
 		graphics.pose().scale(NUMBERS_SCALE, NUMBERS_SCALE);
 		int y = -9;
-		int cursor = iconAndValue(graphics, font, ARMOR_ICON, String.valueOf(protection.armor()), 0, y);
-		cursor = iconAndValue(graphics, font, TOUGHNESS_ICON, wholeOrTenths(protection.toughness()), cursor + 2, y);
+		if (!protection.equals(shown)) {
+			shown = protection;
+			armorText = String.valueOf(protection.armor());
+			toughnessText = wholeOrTenths(protection.toughness());
+			int lightShare = Math.round(light * 100F);
+			int heavyShare = Math.round(heavy * 100F);
+			shareText = lightShare == heavyShare ? lightShare + "%" : lightShare + "-" + heavyShare + "%";
+		}
+		int cursor = iconAndValue(graphics, font, ARMOR_ICON, armorText, 0, y);
+		cursor = iconAndValue(graphics, font, TOUGHNESS_ICON, toughnessText, cursor + 2, y);
 
-		int lightShare = Math.round(light * 100F);
-		int heavyShare = Math.round(heavy * 100F);
-		String share = lightShare == heavyShare ? lightShare + "%" : lightShare + "-" + heavyShare + "%";
+		String share = shareText;
 		// Against the row's right edge, unless big numbers ahead of it push it out into the gap before the food.
 		int shareX = Math.max(Math.round(ROW_WIDTH / NUMBERS_SCALE) - font.width(share), cursor + 3);
 		graphics.text(font, share, shareX, y + 1, SHARE_COLOR, true);
