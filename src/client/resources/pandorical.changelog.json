@@ -4,6 +4,9 @@
     "Client-side only. Nothing needs to be installed on the server."
   ],
   "versions": {
+    "1.0.3": [
+      "Describes itself in one short line of what it adds."
+    ],
     "1.0.2": [
       "The armor hud builds its numbers only when they change, not on every frame."
     ],
